@@ -1,1 +1,6 @@
 .DS_Store
+express_ts_back/node_module
+package-lock.json
+
+react_front/node_module
+package-lock.json

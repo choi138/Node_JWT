@@ -2,13 +2,28 @@ import express, { Request, Response, NextFunction } from 'express';
 import bodyParser from "body-parser";
 import jwt from 'jsonwebtoken';
 import cors from 'cors';
-
+import mysql from 'mysql';
 
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(cors());
 app.use(express.json()); 
+
+const connection = mysql.createConnection({
+    host: '127.0.0.1',
+    user: 'root',
+    data: 'my_db'
+})
+
+connection.connect();
+
+connection.query('SELECT * FROM userTable', (err: Error, rows, fields) => {
+    if (err) throw err;
+    console.log('The solution is: ', rows[0].solution);
+});
+
+connection.end();
 
 const sercret_key = 'asdfghjkl';
 

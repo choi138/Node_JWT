@@ -7,9 +7,24 @@ const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const cors_1 = __importDefault(require("cors"));
+const mysql_1 = __importDefault(require("mysql"));
 const app = (0, express_1.default)();
 app.use(body_parser_1.default.json());
+app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.use((0, cors_1.default)());
+app.use(express_1.default.json());
+const connection = mysql_1.default.createConnection({
+    host: '127.0.0.1',
+    user: 'root',
+    data: 'my_db'
+});
+connection.connect();
+connection.query('SELECT * FROM userTable', (err, rows, fields) => {
+    if (err)
+        throw err;
+    console.log('The solution is: ', rows[0].solution);
+});
+connection.end();
 const sercret_key = 'asdfghjkl';
 const users = [
     {
@@ -36,7 +51,8 @@ const get_user = (id) => {
 app.post('/register', (req, res) => {
     const user = get_user(req.body.id);
     if (user) {
-        res.status(409).send('이미 존재하는 아이디입니다.');
+        res.json({ "message": "이미 존재하는 아이디입니다." });
+        return;
     }
     const new_user = {
         "name": req.body.name,
@@ -55,10 +71,12 @@ app.post('/register', (req, res) => {
 app.post('/login', (req, res) => {
     const user = get_user(req.body.id);
     if (!user) {
-        res.status(404).send('존재하지 않는 아이디입니다.');
+        res.json({ "message": "존재하지 않는 아이디입니다." });
+        return;
     }
     if ((user === null || user === void 0 ? void 0 : user.password) !== req.body.password) {
-        res.status(401).send('비밀번호가 일치하지 않습니다.');
+        res.json({ "message": "비밀번호가 일치하지 않습니다." });
+        return;
     }
     const message = {
         "token": encode_jwt(user),
@@ -72,12 +90,14 @@ app.post('/user', (req, res) => {
         payload;
     }
     catch (err) {
-        res.status(401).send('유효하지 않은 토큰입니다.');
+        res.json({ "message": "토큰이 유효하지 않습니다." });
+        return;
     }
     const user = get_user(payload.id);
     console.log(user);
     if (!user) {
-        res.status(404).send('존재하지 않는 아이디입니다.');
+        res.json({ "message": "존재하지 않는 유저입니다." });
+        return;
     }
     const message = {
         "name": user === null || user === void 0 ? void 0 : user.name,
