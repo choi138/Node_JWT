@@ -1,6 +1,6 @@
 .DS_Store
-express_ts_back/node_module
+express_ts_back/node_modules
 package-lock.json
 
-react_front/node_module
+react_front/node_modules
 package-lock.json
