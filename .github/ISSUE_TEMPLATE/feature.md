@@ -16,5 +16,3 @@ assignees: ''
 
 ## Etc
 해당 이슈에서 참고할 사항이나 그 외 내용들을 입력해주세요
-
-<!-- github issue feature애 있는 내용들임 -->

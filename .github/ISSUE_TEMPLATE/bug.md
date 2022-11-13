@@ -43,4 +43,3 @@ assignees: ''
 
 추가로 할 말이 있다면 남겨주세요
 
-<!-- github issue big에있는 내용들임 -->
